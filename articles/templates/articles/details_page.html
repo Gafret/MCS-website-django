@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load markdown_tags %}
+    </head>
+
+    <body>
+        <h1>DETAILS</h1>
+
+        
+        <h1>{{ article.title }}</h1>
+        <p>{{ article.text_body|markdown|safe }}</p> 
+        <h3>sources</h3>
+        <p>{{ article.sources|markdown|safe }}</p> 
+        <h3>suggested literature</h3>
+        <p>{{ article.suggested_literature|markdown|safe }}</p>
+        <h3>Edited</h3>
+        <p>last edited - {{ article.last_edit_date }}</p>
+        <form method="post" action="{% url 'delete-article' article.author article.slug %}">
+            {% csrf_token %}
+            <input type="submit" value="delete">
+        </form>
+
+        <form action="{% url 'edit-article' article.author article.slug %}">
+            {% csrf_token %}
+            <input type="submit" value="edit">
+        </form>
+
+        <hr>
+        <br> 
+        <form method="post" action="{% url 'add-comment' article.id %}">
+            {% csrf_token %}
+            <input type="text" name="comment_text">
+            <input type="submit" value="send">
+        </form>
+        {% for comment in article.comments.all %}
+            <h3>{{ comment.author }}</h3>
+            <p>{{ comment.comment_text }}</p>
+            <form method="post" action="{% url 'like-comment' %}">
+                {% csrf_token %}
+                <button name="like" value="{{ comment.id }}">LIKE</button>
+                <p>{{ comment.likes.all|length }}</p>
+                <button name="dislike" value="{{ comment.id }}">DISLIKE</button>
+                <p>{{ comment.dislikes.all|length }}</p>
+            </form>
+            <hr>
+        {% endfor %}
+        <!-- <p>{{ article.sources|markdown|safe }}</p> 
+        <p>{{ article.sug_literature|markdown|safe }}</p>  -->
+         
+
+    </body>
+</html>

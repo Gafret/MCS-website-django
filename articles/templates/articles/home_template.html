@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load markdown_tags %}
+    </head>
+
+    <body>
+        <h2 style="color: red;">User: {{ request.user.username }}</h2>
+
+        {% for article in object_list %}
+            <a href="{{ article.get_absolute_url }}"><h1>{{ article.title }}</h1></a>
+            <p>{{ article.get_preview|markdown|safe }}</p> 
+            <hr>
+            <form method="post" action="{% url 'like-article' %}">
+                {% csrf_token %}
+                <button name="like" value="{{ article.id }}">LIKE</button>
+                <p>{{ article.likes.all|length }}</p>
+                <button name="dislike" value="{{ article.id }}">DISLIKE</button>
+                <p>{{ article.dislikes.all|length }}</p>
+            </form>
+            <br> 
+            <!-- <p>{{ article.sources|markdown|safe }}</p> 
+            <p>{{ article.sug_literature|markdown|safe }}</p>  -->
+        {% endfor%}     
+
+    </body>
+</html>
