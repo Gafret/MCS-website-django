@@ -7,6 +7,8 @@ from django.urls import reverse
 from authentication.models import Profile
 
 # Create your models here.
+class Tag(models.Model):
+    name = models.CharField(max_length=20)
 
 class Article(models.Model):
 
@@ -27,7 +29,7 @@ class Article(models.Model):
     dislikes = models.ManyToManyField(Profile, related_name='disliked_articles', blank=True)
     bookmarks = models.ManyToManyField(Profile, related_name="bookmarked_articles", blank=True)
     
-    #tags = models.CharField()/TaggitField()
+    tags = models.ManyToManyField(Tag, related_name='tagged_articles', blank=True)
 
 
     def get_absolute_url(self):
@@ -50,5 +52,6 @@ class Comment(models.Model):
 
     likes = models.ManyToManyField(Profile, related_name="liked_comments")
     dislikes = models.ManyToManyField(Profile)
+
 
 
