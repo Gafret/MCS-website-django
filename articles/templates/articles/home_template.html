@@ -5,22 +5,27 @@
     </head>
 
     <body>
-        <h2 style="color: red;">User: {{ request.user.username }}</h2>
+        <h3 style="color: red;">Logged in as: {{ request.user.username }}</h3>
 
         {% for article in object_list %}
-            <a href="{{ article.get_absolute_url }}"><h1>{{ article.title }}</h1></a>
+
+            <a href="{{ article.get_absolute_url }}"><h2>{{ article.title }}</h2></a>
             <p>{{ article.get_preview|markdown|safe }}</p> 
             <hr>
+
             <form method="post" action="{% url 'articles:like-article' %}">
                 {% csrf_token %}
-                <button name="like" value="{{ article.id }}">LIKE</button>
-                <p>{{ article.likes.all|length }}</p>
-                <button name="dislike" value="{{ article.id }}">DISLIKE</button>
-                <p>{{ article.dislikes.all|length }}</p>
+
+                <button id="like-btn" name="like" value="{{ article.id }}">LIKE</button>
+                <label>{{ article.likes.all|length }}</label>
+
+                <button id="dislike-btn" name="dislike" value="{{ article.id }}">DISLIKE</button>
+                <label>{{ article.dislikes.all|length }}</label>
+
             </form>
+
             <br> 
-            <!-- <p>{{ article.sources|markdown|safe }}</p> 
-            <p>{{ article.sug_literature|markdown|safe }}</p>  -->
+            
         {% endfor%}     
 
     </body>
