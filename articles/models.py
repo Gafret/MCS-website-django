@@ -33,7 +33,7 @@ class Article(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('details', kwargs={"author":self.author, "slug":self.slug})
+        return reverse('articles:details', kwargs={"author":self.author, "slug":self.slug})
     
 
     # used to show only part of a text in html template

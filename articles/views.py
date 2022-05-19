@@ -18,75 +18,62 @@ from . import models
 
 # refactor + add login constaint
 def like_article(request):
+    article_id = request.POST.get('like', False) or request.POST['dislike'] # if "like" in dict it doesn't check "dislike", if "dislike" in dict then gets article_id
+    user = request.user
+    article = models.Article.objects.get(pk=article_id)
+    profile = user.profile
+
     if 'like' in request.POST:
-        article_id = request.POST['like']
-        user = request.user
-        profile = user.profile
-
-        article = models.Article.objects.get(pk=article_id)
-
         if profile in article.likes.all():     
             article.likes.remove(profile)
         else:
             article.likes.add(profile)
 
     elif 'dislike' in request.POST:
-        article_id = request.POST['dislike']
-        user = request.user
-        profile = user.profile
-
-        article = models.Article.objects.get(pk=article_id)
-
         if profile in article.dislikes.all():     
             article.dislikes.remove(profile)
         else:
             article.dislikes.add(profile)
 
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('articles:home'))
 
 
 def like_comment(request):
-    if 'like' in request.POST:
-        comment_id = request.POST['like']
-        user = request.user
-        profile = user.profile
+    comment_id = request.POST.get('like', False) or request.POST['dislike']
+    user = request.user
+    profile = user.profile
+    comment = models.Comment.objects.get(pk=comment_id)
+    slug = comment.related_article.slug
 
-        comment = models.Comment.objects.get(pk=comment_id)
+    if 'like' in request.POST:
         if profile in comment.likes.all():     
             comment.likes.remove(profile)
         else:
             comment.likes.add(profile)
 
     if 'dislike' in request.POST:
-        comment_id = request.POST['dislike']
-        user = request.user
-        profile = user.profile
-        slug = comment.related_article.slug
-
-        comment = models.Comment.objects.get(pk=comment_id)
         if profile in comment.dislikes.all():     
             comment.dislikes.remove(profile)
         else:
             comment.dislikes.add(profile)
 
-    return HttpResponseRedirect(reverse('page-details', 
+    return HttpResponseRedirect(reverse('articles:details', 
                                          kwargs={'author':profile, 
                                                  'slug':slug}))
 
 
-def add_comment(request, article_id):
-    profile = request.user.profile
-    related_article = models.Article.objects.get(pk=article_id)
+def add_comment(request, author, slug):
+    author_profile = User.objects.get(username=author).profile
+    commenter_profile = request.user.profile
+    related_article = models.Article.objects.get(author=author_profile, slug=slug)
     comment_text = request.POST['comment_text']
-    slug = related_article.slug
 
-    comment = models.Comment.objects.create(author=profile, 
+    comment = models.Comment.objects.create(author=commenter_profile, 
                                             related_article=related_article,    
                                             comment_text=comment_text)
-    comment.save()
-
-    return HttpResponseRedirect(reverse('page-details', 
-                                         kwargs={'author':profile, 'slug':slug}))
+    
+    return HttpResponseRedirect(reverse('articles:details', 
+                                         kwargs={'author':author, 'slug':slug}))
 
 
 class HomeView(ListView):

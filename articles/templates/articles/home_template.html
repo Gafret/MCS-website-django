@@ -11,7 +11,7 @@
             <a href="{{ article.get_absolute_url }}"><h1>{{ article.title }}</h1></a>
             <p>{{ article.get_preview|markdown|safe }}</p> 
             <hr>
-            <form method="post" action="{% url 'like-article' %}">
+            <form method="post" action="{% url 'articles:like-article' %}">
                 {% csrf_token %}
                 <button name="like" value="{{ article.id }}">LIKE</button>
                 <p>{{ article.likes.all|length }}</p>
