@@ -28,12 +28,14 @@ def like_article(request):
             article.likes.remove(profile)
         else:
             article.likes.add(profile)
+            article.dislikes.remove(profile)
 
     elif 'dislike' in request.POST:
         if profile in article.dislikes.all():     
             article.dislikes.remove(profile)
         else:
             article.dislikes.add(profile)
+            article.likes.remove(profile)
 
     return HttpResponseRedirect(reverse('articles:home'))
 
@@ -50,12 +52,15 @@ def like_comment(request):
             comment.likes.remove(profile)
         else:
             comment.likes.add(profile)
+            comment.dislikes.remove(profile)
+            
 
     if 'dislike' in request.POST:
         if profile in comment.dislikes.all():     
             comment.dislikes.remove(profile)
         else:
             comment.dislikes.add(profile)
+            comment.likes.remove(profile)
 
     return HttpResponseRedirect(reverse('articles:details', 
                                          kwargs={'author':profile, 
