@@ -134,6 +134,6 @@ class UpdateArticleView(UpdateView):
 
 class DeleteArticleView(DeleteView):
     model = models.Article
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('articles:home')
 
 

@@ -13,7 +13,7 @@ class SignUpView(CreateView):
     form_class = SignUpForm
     template_name = "authentication/signup_page.html"
     model = User
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('articles:home')
 
     def form_valid(self, form):
         form.instance.password = make_password(self.request.POST['password'])
