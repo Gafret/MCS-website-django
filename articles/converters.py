@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 
 from authentication import models
 
-
+# add ValueError exceptions and others
 class UsernameProfileConverter:
-    regex = ''
+    regex = '.+'
 
     def to_python(self, value):
         user = User.objects.get(username=value)

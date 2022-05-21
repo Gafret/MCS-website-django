@@ -1,12 +1,14 @@
-from django.urls import path, include
-from . import views
+from django.urls import path, include, register_converter
+from . import views, converters
+
+register_converter(converters.UsernameProfileConverter, 'user')
 
 app_name = 'articles'
 urlpatterns = [
     path('home/', views.HomeView.as_view(), name='home'),
     path('create_article/', views.CreateArticleView.as_view(), name='create-article'),
 
-    path('article/<str:author>/<slug:slug>/', include([
+    path('article/<user:author>/<slug:slug>/', include([
         path('edit_article/', views.UpdateArticleView.as_view(), name='edit-article'),
         path('delete/', views.DeleteArticleView.as_view(), name='delete-article'),
         path('add_comment/', views.add_comment, name='add-comment'),

@@ -7,7 +7,7 @@ from django.urls import reverse, reverse_lazy
 
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -68,7 +68,7 @@ def like_comment(request):
 
 
 def add_comment(request, author, slug):
-    author_profile = User.objects.get(username=author).profile
+    author_profile = author
     commenter_profile = request.user.profile
     related_article = models.Article.objects.get(author=author_profile, slug=slug)
     comment_text = request.POST['comment_text']
@@ -78,7 +78,8 @@ def add_comment(request, author, slug):
                                             comment_text=comment_text)
     
     return HttpResponseRedirect(reverse('articles:details', 
-                                         kwargs={'author':author, 'slug':slug}))
+                                         kwargs={'author':author_profile,
+                                                 'slug':slug}))
 
 
 class HomeView(ListView):
@@ -93,11 +94,10 @@ class ArticleDetailsView(DetailView):
 
     # takes arguments passed to the url and filters articles by their value
     def get_queryset(self):
-        username = self.kwargs['author']
-        user = User.objects.get(username=username)
+        profile = self.kwargs['author']
         slug = self.kwargs['slug']
 
-        return models.Article.objects.filter(slug=slug, author=user.profile)
+        return models.Article.objects.filter(slug=slug, author=profile)
 
 
 class CreateArticleView(LoginRequiredMixin, CreateView):
@@ -126,9 +126,8 @@ class UpdateArticleView(UpdateView):
     # default get_object method has to be overridden otherwise it doesn't behave 
     # properly while prepopulating form fields in editing view 
     def get_object(self):
-        username = self.kwargs['author']
         slug = self.kwargs['slug']
-        profile = User.objects.get(username=username).profile
+        profile = self.kwargs['author']
 
         return models.Article.objects.get(author=profile, slug=slug)
         
