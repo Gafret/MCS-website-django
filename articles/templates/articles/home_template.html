@@ -2,31 +2,66 @@
 <html>
     <head>
         {% load markdown_tags %}
+        {% load static %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cardo&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        
+        <link href="{% static 'articles/home.css' %}" rel="stylesheet" type="text/css">
     </head>
 
     <body>
         <h3 style="color: red;">Logged in as: {{ request.user.username }}</h3>
 
-        {% for article in object_list %}
+        <div class="container">
+            {% for article in object_list %}
 
-            <a href="{{ article.get_absolute_url }}"><h2>{{ article.title }}</h2></a>
-            <p>{{ article.get_preview|markdown|safe }}</p> 
-            <hr>
+                <div class="container__card">
 
-            <form method="post" action="{% url 'articles:like-article' %}">
-                {% csrf_token %}
+                    <div class="article-preview">
+                        <h2><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+                        <h4>useful for when you need to use a URL reversal before your projec</h4>
+                        <h3>by {{ article.author }}</h3>
+                        <p>{{ article.get_preview|markdown|safe }}</p> 
+                    </div> 
 
-                <button id="like-btn" name="like" value="{{ article.id }}">LIKE</button>
-                <label>{{ article.likes.all|length }}</label>
+                    
 
-                <button id="dislike-btn" name="dislike" value="{{ article.id }}">DISLIKE</button>
-                <label>{{ article.dislikes.all|length }}</label>
+                    <div class="reactions">
+                        <h3>tags: </h3>
+                        <form method="post" action="{% url 'articles:like-article' %}">
+                            {% csrf_token %}
+        
+                            <button id="like-btn" name="like" value="{{ article.id }}">
+                                <span class="material-symbols-outlined">
+                                    keyboard_arrow_up
+                                </span>
+                            </button>
+                            <label for="#like-btn">{{ article.likes.all|length }}</label>
+        
+                            <button id="dislike-btn" name="dislike" value="{{ article.id }}">
+                                <span class="material-symbols-outlined">
+                                    keyboard_arrow_down
+                                </span>
+                            </button>
+                            <label for="#dislike-btn">{{ article.dislikes.all|length }}</label>
+        
+                        </form>
+                    </div>
+                    <br> 
 
-            </form>
+                </div>
 
-            <br> 
-            
-        {% endfor%}     
+            {% endfor%}  
+        </div>
+           
 
     </body>
 </html>

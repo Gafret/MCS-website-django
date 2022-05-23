@@ -29,7 +29,7 @@ class Article(models.Model):
     dislikes = models.ManyToManyField(Profile, related_name='disliked_articles', blank=True)
     bookmarks = models.ManyToManyField(Profile, related_name="bookmarked_articles", blank=True)
     
-    tags = models.ManyToManyField(Tag, related_name='tagged_articles', blank=True)
+    tags = models.ManyToManyField(Tag, related_name='tagged_articles', blank=True, null=True)
 
 
     def get_absolute_url(self):

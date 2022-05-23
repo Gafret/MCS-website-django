@@ -1,0 +1,86 @@
+.container {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+.container__card {
+    width: 970px;
+    height: auto;
+    border-radius: 14px;
+    background-color: #E2E2E2;
+    margin-top: 80px;
+}
+
+.container__card .article-preview {
+    padding: 0px 100px 0px 100px;
+}
+
+.container__card .article-preview h2 {
+    font-family: 'Josefin Sans', sans-serif;
+
+    padding-top: 60px;
+}
+
+.container__card .article-preview h4 {
+    font-family: 'Cardo', sans-serif;
+    opacity: 0.5;
+
+    margin-top: -20px;
+}
+
+.container__card .article-preview h3 {
+    font-family: 'Josefin Sans', sans-serif;
+
+    margin-top: 0px;
+}
+
+.container__card .article-preview p {
+    font-family: 'Cardo', serif;
+    font-size: 20px;
+}
+
+.container__card .reactions {
+    padding: 50px 100px 30px 100px;
+}
+
+.container__card .reactions button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: #E2E2E2;
+}
+
+.container__card .reactions button span {
+    transform: scale(2);
+    animation-name: revers;
+    animation-duration: 0.25s;
+}
+
+.container__card .reactions button span:hover {
+    animation-name: react;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in;
+    animation-duration: 0.5s;
+}
+
+@keyframes react {
+    0% {
+        
+    }
+    100% {
+        transform: scale(2.5);
+    }
+    
+}
+
+@keyframes revers {
+    0% {
+        transform: scale(2.5);
+    }
+    100% {
+        transform: scale(2);
+    }
+    
+}

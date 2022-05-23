@@ -9,7 +9,6 @@ class UsernameProfileConverter:
     regex = r'[@.\-+\w]+'
 
     def to_python(self, value):
-        print(value)
         user = User.objects.get(username=value)
         profile = user.profile
 
